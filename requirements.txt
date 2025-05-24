@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+typer
+streamlit
+kubernetes
+aiofiles
+python-dotenv
