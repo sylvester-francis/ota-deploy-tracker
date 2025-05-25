@@ -224,31 +224,19 @@ black backend/ cli/ dashboard/ tests/
 isort backend/ cli/ dashboard/ tests/
 ```
 
-### Bazel Build System
+### Testing
 
-The project uses Bazel for building, testing, and packaging. Bazel provides fast, reproducible builds and supports multiple languages and platforms.
+The project uses pytest for testing. To run tests:
 
 ```bash
-# Build all targets
-bazel build //...
+# Install test dependencies
+pip install pytest pytest-cov
 
-# Run all tests
-bazel test //...
+# Run tests with coverage
+pytest tests/ --cov=.
 
-# Build specific components
-bazel build :api_server
-bazel build :dashboard
-bazel build :job_runner
-
-# Run specific components
-bazel run :api_server
-bazel run :dashboard
-bazel run :job_runner
-
-# Build Docker images
-bazel build :api_server_image
-bazel build :dashboard_image
-bazel build :job_runner_image
+# Generate coverage report
+pytest tests/ --cov=. --cov-report=html
 ```
 
 ### Continuous Integration
@@ -257,7 +245,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 
 1. **Test and Lint**: Runs on every push and pull request to verify code quality and test coverage
 2. **Docker Build**: Builds and publishes Docker images to GitHub Container Registry
-3. **Bazel Build**: Builds and tests the project using Bazel for reproducible builds
+3. **Python Tests**: Runs pytest with coverage reporting
 
 ### Project Structure
 
@@ -267,7 +255,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 │   └── workflows/          # GitHub Actions workflows
 │       ├── test-lint.yml     # Testing and linting workflow
 │       ├── docker-build.yml  # Docker build workflow
-│       └── bazel.yml         # Bazel build workflow
+│       └── python-tests.yml  # Python testing workflow
 ├── backend/                # FastAPI backend
 │   ├── database.py         # Database configuration
 │   ├── main.py             # API endpoints
@@ -285,11 +273,9 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 │   ├── test_api.py         # API tests
 │   ├── test_cli.py         # CLI tests
 │   └── test_job_runner.py  # Job runner tests
-├── .bazelrc                # Bazel configuration
 ├── .dockerignore           # Files to exclude from Docker builds
 ├── .env.example            # Environment variables template
 ├── .flake8                  # Flake8 configuration
-├── BUILD                    # Main Bazel build file
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile              # Main Dockerfile
 ├── Dockerfile.api          # API-specific Dockerfile
@@ -297,8 +283,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 ├── Dockerfile.job-runner   # Job runner-specific Dockerfile
 ├── metrics.txt             # Generated metrics file
 ├── pyproject.toml         # Python project configuration
-├── requirements.txt        # Python dependencies
-└── WORKSPACE               # Bazel workspace definition
+└── requirements.txt        # Python dependencies
 ```
 
 ## License
