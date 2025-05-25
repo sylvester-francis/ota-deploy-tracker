@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - .:/app
+      - ~/.kube/config:/root/.kube/config:ro
+    networks:
+      - kdm-network
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - .:/app
+      - ~/.kube/config:/root/.kube/config:ro
+    depends_on:
+      - api
+    networks:
+      - kdm-network
+
+  job-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.job-runner
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - .:/app
+      - ~/.kube/config:/root/.kube/config:ro
+    depends_on:
+      - api
+    networks:
+      - kdm-network
+
+networks:
+  kdm-network:
+    driver: bridge
