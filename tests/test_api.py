@@ -35,7 +35,7 @@ def test_update_status_endpoint(client):
     # First create a job
     deploy_response = client.post("/ota/deploy", params={"version": "1.0.0", "wave": "canary"})
     job_id = deploy_response.json()["job_id"]
-    
+
     # Then update its status
     update_response = client.post("/ota/update_status", params={"job_id": job_id, "status": "complete"})
     assert update_response.status_code == 200

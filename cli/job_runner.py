@@ -21,8 +21,8 @@ def retry_patch(v1, name, namespace, body, retries=3):
             v1.patch_namespaced_pod(name=name, namespace=namespace, body=body)
             return True
         except Exception as e:
-            print(f"⚠️ Retry {i+1}/{retries} failed for {name}: {e}")
-            time.sleep(2**i)
+            print(f"⚠️ Retry {i + 1}/{retries} failed for {name}: {e}")
+            time.sleep(2 ** i)
     return False
 
 
@@ -30,7 +30,7 @@ def write_metrics(updated_count: int, total_jobs: int):
     # Absolute path to root-level metrics.txt
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     metrics_path = os.path.join(root_dir, "metrics.txt")
-    
+
     # Read existing metrics if they exist
     existing_metrics = ""
     try:
@@ -52,7 +52,7 @@ ota_jobs_successful {updated_count}
 # TYPE ota_jobs_total gauge
 ota_jobs_total {total_jobs}
 """
-    
+
     # Write combined metrics
     with open(metrics_path, "w") as f:
         f.write(existing_metrics + "\n" + job_metrics if existing_metrics else job_metrics)
@@ -83,7 +83,7 @@ ota_updated_pods_total {updated_count}
 # TYPE ota_last_run_timestamp_seconds gauge
 ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
 """.strip()
-        
+
         # Absolute path to root-level metrics.txt
         root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         metrics_path = os.path.join(root_dir, "metrics.txt")
@@ -138,7 +138,7 @@ ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
     # Absolute path to root-level metrics.txt
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     metrics_path = os.path.join(root_dir, "metrics.txt")
-    
+
     # Write pod metrics first
     with open(metrics_path, "w") as f:
         f.write(pod_metrics + "\n")

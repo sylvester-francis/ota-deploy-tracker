@@ -36,7 +36,10 @@ def list():
     response = requests.get(f"{API_URL}/ota/jobs")
     if response.status_code == 200:
         for job in response.json():
-            job_info = f"[{job['id']}] Version: {job['version']} | Wave: {job['wave']} | Status: {job['status']}"
+            job_info = (
+                f"[{job['id']}] Version: {job['version']} | "
+                f"Wave: {job['wave']} | Status: {job['status']}"
+            )
             typer.echo(job_info)
     else:
         typer.echo("❌ Failed to fetch jobs.")
