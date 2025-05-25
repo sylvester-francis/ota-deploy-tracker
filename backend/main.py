@@ -2,7 +2,6 @@
 from fastapi import FastAPI, Depends, Response
 from sqlalchemy.orm import Session
 from . import models, database
-from pathlib import Path
 import os
 
 app = FastAPI()

@@ -38,7 +38,6 @@ def write_metrics(updated_count: int, total_jobs: int):
             existing_metrics = f.read()
     except FileNotFoundError:
         pass
-    
     # Append job metrics
     job_metrics = f"""
 # HELP ota_jobs_pending Number of pending OTA jobs
@@ -75,7 +74,6 @@ def update_robot_pods(version: str, wave: str = "canary"):
         # Still write metrics even when no pods are found
         updated_count = 0
         total_jobs = 1
-        
         # Create pod metrics
         pod_metrics = f"""
 # HELP ota_updated_pods_total Total pods updated
@@ -89,14 +87,11 @@ ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
         # Absolute path to root-level metrics.txt
         root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         metrics_path = os.path.join(root_dir, "metrics.txt")
-        
         # Write pod metrics first
         with open(metrics_path, "w") as f:
             f.write(pod_metrics + "\n")
-        
         # Then append job metrics
         write_metrics(updated_count, total_jobs)
-        
         print(f"📊 Metrics written to {metrics_path}")
         return
 
@@ -131,7 +126,6 @@ ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
 
     # For direct update calls, we'll consider this as 1 job with the given updated_count
     total_jobs = 1
-    
     # Create pod metrics
     pod_metrics = f"""
 # HELP ota_updated_pods_total Total pods updated
@@ -141,7 +135,6 @@ ota_updated_pods_total {updated_count}
 # TYPE ota_last_run_timestamp_seconds gauge
 ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
 """.strip()
-    
     # Absolute path to root-level metrics.txt
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     metrics_path = os.path.join(root_dir, "metrics.txt")
@@ -149,10 +142,8 @@ ota_last_run_timestamp_seconds {int(datetime.utcnow().timestamp())}
     # Write pod metrics first
     with open(metrics_path, "w") as f:
         f.write(pod_metrics + "\n")
-    
     # Then append job metrics
     write_metrics(updated_count, total_jobs)
-    
     print(f"📊 Metrics written to {metrics_path}")
 
 
