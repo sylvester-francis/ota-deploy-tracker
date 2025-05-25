@@ -1,8 +1,10 @@
-import typer
-import requests
 import os
+
+import requests
+import typer
 from dotenv import load_dotenv
-from .job_runner import update_robot_pods  # noqa : E402
+
+from .job_runner import update_robot_pods  # noqa: E402
 
 # Load environment variables from .env file if it exists
 load_dotenv()

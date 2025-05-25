@@ -1,6 +1,8 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from cli.job_runner import update_robot_pods, write_metrics, retry_patch
+
+from cli.job_runner import retry_patch, update_robot_pods, write_metrics
 
 
 @pytest.fixture
@@ -36,7 +38,9 @@ def test_update_robot_pods_no_pods(mock_load_config, mock_core_api, mock_k8s_cli
 @patch("cli.job_runner.client.CoreV1Api")
 @patch("cli.job_runner.config.load_kube_config")
 @patch("cli.job_runner.retry_patch")
-def test_update_robot_pods_with_pods(mock_retry_patch, mock_load_config, mock_core_api, mock_k8s_client, mock_pod):
+def test_update_robot_pods_with_pods(
+    mock_retry_patch, mock_load_config, mock_core_api, mock_k8s_client, mock_pod
+):
     """Test update_robot_pods with pods to update."""
     mock_core_api.return_value = mock_k8s_client
     mock_k8s_client.list_pod_for_all_namespaces.return_value.items = [mock_pod]

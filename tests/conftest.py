@@ -1,8 +1,10 @@
-import pytest
 import os
 import tempfile
+
+import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 from backend.database import Base
 
 
@@ -31,15 +33,17 @@ def test_engine(test_db_url):
 
 
 @pytest.fixture(scope="function")
-def test_db_session(test_engine):
+def test_database_session(test_engine):
     """Create a SQLAlchemy session for testing."""
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-    session = TestingSessionLocal()
+    session_factory = scoped_session(
+        sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
+    )
+    session = session_factory()
     try:
         yield session
     finally:
-        session.rollback()
         session.close()
+        session_factory.remove()
 
 
 @pytest.fixture(scope="function")

@@ -1,8 +1,9 @@
-import streamlit as st
-import requests
-import pandas as pd
-import subprocess
 import os
+import subprocess
+
+import pandas as pd
+import requests
+import streamlit as st
 from dotenv import load_dotenv
 
 # Load environment variables from .env file if it exists

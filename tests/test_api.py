@@ -1,5 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
+
 from backend.main import app
 
 
@@ -37,6 +38,9 @@ def test_update_status_endpoint(client):
     job_id = deploy_response.json()["job_id"]
 
     # Then update its status
-    update_response = client.post("/ota/update_status", params={"job_id": job_id, "status": "complete"})
+    update_response = client.post(
+        "/ota/update_status",
+        params={"job_id": job_id, "status": "complete"}
+    )
     assert update_response.status_code == 200
     assert update_response.json()["status"] == "complete"

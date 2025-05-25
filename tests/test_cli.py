@@ -1,7 +1,10 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from cli.client import deploy, list as list_jobs, update
+
 import cli.client
+from cli.client import deploy, update
+from cli.client import list as list_jobs
 
 
 @pytest.fixture
