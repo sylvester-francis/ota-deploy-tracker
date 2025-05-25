@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kdm-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kdm-api
+  template:
+    metadata:
+      labels:
+        app: kdm-api
+    spec:
+      containers:
+      - name: api
+        image: kdm-api:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kdm-api
+spec:
+  selector:
+    app: kdm-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kdm-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kdm-dashboard
+  template:
+    metadata:
+      labels:
+        app: kdm-dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: kdm-dashboard:latest
+        ports:
+        - containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kdm-dashboard
+spec:
+  selector:
+    app: kdm-dashboard
+  ports:
+  - port: 8501
+    targetPort: 8501
