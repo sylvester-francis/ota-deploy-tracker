@@ -20,8 +20,8 @@ coverage --coverage_report_generator=@bazel_tools//tools/test:coverage_report_ge
 
 # Performance options
 build --jobs=auto
-build --local_cpu_resources=%{CPU}
-build --local_ram_resources=%{RAM_MB}
+build --local_cpu_resources=HOST_CPUS
+build --local_ram_resources=HOST_RAM*.75
 
 # Convenience aliases
 build:dev --compilation_mode=dbg
