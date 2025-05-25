@@ -1,7 +1,9 @@
 # backend/main.py
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Response
 from sqlalchemy.orm import Session
 from . import models, database
+from pathlib import Path
+import os
 
 app = FastAPI()
 
@@ -22,7 +24,7 @@ def root():
 
 
 @app.post("/ota/deploy")
-def deploy_ota(version: str, wave: str = "canary", db: Session = Depends(get_db)):
+def deploy_ota(version: str, wave: str = "canary", db: Session = Depends(get_db)):  # noqa : E501
     job = models.OTAJob(version=version, wave=wave, status="pending")
     db.add(job)
     db.commit()
@@ -32,7 +34,7 @@ def deploy_ota(version: str, wave: str = "canary", db: Session = Depends(get_db)
 
 @app.get("/ota/jobs")
 def list_jobs(db: Session = Depends(get_db)):
-    jobs = db.query(models.OTAJob).order_by(models.OTAJob.created_at.desc()).all()
+    jobs = db.query(models.OTAJob).order_by(models.OTAJob.created_at.desc()).all()  # noqa : E501
     return [
         {"id": j.id, "version": j.version, "wave": j.wave, "status": j.status}
         for j in jobs
@@ -47,3 +49,14 @@ def update_status(job_id: int, status: str, db: Session = Depends(get_db)):
         db.commit()
         return {"job_id": job_id, "status": job.status}
     return {"error": "Job not found"}
+
+
+@app.get("/metrics")
+def metrics():
+    metrics_path = os.path.join(os.path.dirname(__file__), "..", "metrics.txt")
+    try:
+        with open(metrics_path, "r") as f:
+            content = f.read()
+        return Response(content=content, media_type="text/plain")
+    except Exception as e:
+        return Response(f"# error: {e}", media_type="text/plain")

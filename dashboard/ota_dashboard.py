@@ -55,3 +55,12 @@ try:
     st.dataframe(pod_df)
 except Exception as e:
     st.error(f"Error fetching pods: {e}")
+
+st.subheader("🧾 Pod Logs")
+selected_pod = st.selectbox("Choose a robot pod", [p["Name"] for p in pod_data])  # noqa : E501
+if st.button("View Logs"):
+    try:
+        logs = subprocess.check_output(["kubectl", "logs", selected_pod]).decode()  # noqa : E501
+        st.code(logs, language="bash")
+    except Exception as e:
+        st.error(f"Error: {e}")

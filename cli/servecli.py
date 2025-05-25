@@ -1,5 +1,7 @@
 import typer
 import requests
+from .job_runner import update_robot_pods  # noqa : E402
+
 
 app = typer.Typer()
 API_URL = "http://127.0.0.1:8000"
@@ -35,6 +37,15 @@ def list():
             )
     else:
         typer.echo("❌ Failed to fetch jobs.")
+
+
+@app.command()
+def update(version: str, wave: str = "canary"):
+    """
+    Run OTA update rollout locally (patch Kubernetes pods).
+    """
+    typer.echo(f"🚀 Running local OTA update for version {version}, wave {wave}")  # noqa : E501
+    update_robot_pods(version=version, wave=wave)
 
 
 if __name__ == "__main__":
