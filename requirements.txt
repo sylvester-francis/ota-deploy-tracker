@@ -15,8 +15,6 @@ pytest>=7.0.0
 pytest-cov>=4.1.0
 httpx>=0.24.0
 
-# Linting and formatting
+# Linting
 flake8>=6.0.0
 ruff>=0.0.272
-black>=23.3.0
-isort>=5.12.0

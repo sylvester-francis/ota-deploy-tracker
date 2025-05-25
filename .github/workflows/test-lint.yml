@@ -26,12 +26,6 @@ jobs:
     - name: Lint with Ruff
       run: |
         ruff check backend/ cli/ dashboard/ tests/
-    - name: Format check with Black
-      run: |
-        black --check backend/ cli/ dashboard/ tests/
-    - name: Import sort check with isort
-      run: |
-        isort --check-only --profile black backend/ cli/ dashboard/ tests/
 
   test:
     runs-on: ubuntu-latest

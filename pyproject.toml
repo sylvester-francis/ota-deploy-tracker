@@ -9,24 +9,6 @@ ignore = ["E203"]
 [tool.ruff.lint.isort]
 known-first-party = ["backend", "cli", "dashboard"]
 
-[tool.black]
-line-length = 100
-target-version = ["py39"]
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | venv
-)/
-'''
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
