@@ -25,7 +25,7 @@ with st.form("deploy_form"):
     submitted = st.form_submit_button("Trigger Deployment")
     if submitted:
         result = subprocess.run(
-            ["python", "cli/servecli.py", "deploy", version, "--wave", wave],
+            ["python", "cli/client.py", "deploy", version, "--wave", wave],
             capture_output=True,
             text=True,
         )
