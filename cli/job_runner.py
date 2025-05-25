@@ -4,8 +4,13 @@ import time
 from datetime import datetime
 import requests
 from kubernetes import client, config
+from dotenv import load_dotenv
 
-API_URL = "http://127.0.0.1:8000"
+# Load environment variables from .env file if it exists
+load_dotenv()
+
+# Get API URL from environment variable or use default
+API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
 OTA_STATUS_FILE = Path(__file__).parent / "ota_status.json"
 METRICS_FILE = Path(__file__).parent / "metrics.txt"
 

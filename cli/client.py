@@ -1,10 +1,14 @@
 import typer
 import requests
+import os
+from dotenv import load_dotenv
 from .job_runner import update_robot_pods  # noqa : E402
 
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 app = typer.Typer()
-API_URL = "http://127.0.0.1:8000"
+API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
 
 
 @app.command()

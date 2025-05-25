@@ -2,8 +2,14 @@ import streamlit as st
 import requests
 import pandas as pd
 import subprocess
+import os
+from dotenv import load_dotenv
 
-API_URL = "http://127.0.0.1:8000"
+# Load environment variables from .env file if it exists
+load_dotenv()
+
+# Get API URL from environment variable or use default
+API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(layout="wide")
 st.title("🤖 OTA Deployment Tracker")
@@ -25,7 +31,7 @@ with st.form("deploy_form"):
     submitted = st.form_submit_button("Trigger Deployment")
     if submitted:
         result = subprocess.run(
-            ["python", "cli/client.py", "deploy", version, "--wave", wave],
+            ["python", "-m", "cli.client", "deploy", version, "--wave", wave],
             capture_output=True,
             text=True,
         )

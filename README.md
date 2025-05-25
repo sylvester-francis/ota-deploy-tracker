@@ -36,11 +36,12 @@ The system consists of several components:
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.8+ (for local development)
 - Kubernetes cluster (or minikube for local development)
 - kubectl configured to access your cluster
+- Docker and Docker Compose (for containerized deployment)
 
-### Setup
+### Local Setup
 
 1. Clone the repository:
    ```bash
@@ -64,9 +65,34 @@ The system consists of several components:
    kubectl apply -f k8s/robots.yaml
    ```
 
+### Docker Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sylvester-francis/ota-deploy-tracker.git
+   cd ota-deploy-tracker
+   ```
+
+2. Create a `.env` file from the template:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Build and start the containers:
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Create sample robot pods:
+   ```bash
+   kubectl apply -f k8s/robots.yaml
+   ```
+
 ## Usage
 
-### Starting the Backend API
+### Local Development
+
+#### Starting the Backend API
 
 ```bash
 uvicorn backend.main:app --reload
@@ -74,7 +100,7 @@ uvicorn backend.main:app --reload
 
 The API will be available at http://127.0.0.1:8000
 
-### Starting the Dashboard
+#### Starting the Dashboard
 
 ```bash
 streamlit run dashboard/ota_dashboard.py
@@ -82,25 +108,65 @@ streamlit run dashboard/ota_dashboard.py
 
 The dashboard will be available at http://localhost:8501
 
-### Using the CLI
+#### Using the CLI
 
-#### Trigger a new OTA deployment:
+##### Trigger a new OTA deployment:
 
 ```bash
 python -m cli.client deploy 2.0.0 --wave canary
 ```
 
-#### List all OTA jobs:
+##### List all OTA jobs:
 
 ```bash
 python -m cli.client list
 ```
 
-#### Run an OTA update directly:
+##### Run an OTA update directly:
 
 ```bash
 python -m cli.client update 2.0.0 --wave blue
 ```
+
+### Docker Deployment
+
+#### Starting All Services
+
+```bash
+docker-compose up -d
+```
+
+This will start the API, dashboard, and job-runner services in the background.
+
+#### Viewing Logs
+
+```bash
+# View logs from all services
+docker-compose logs -f
+
+# View logs from a specific service
+docker-compose logs -f api
+docker-compose logs -f dashboard
+docker-compose logs -f job-runner
+```
+
+#### Using the CLI with Docker
+
+```bash
+# Trigger a new OTA deployment
+docker-compose exec api python -m cli.client deploy 2.0.0 --wave canary
+
+# List all OTA jobs
+docker-compose exec api python -m cli.client list
+
+# Run an OTA update directly
+docker-compose exec api python -m cli.client update 2.0.0 --wave blue
+```
+
+#### Accessing Services
+
+- API: http://localhost:8000
+- Dashboard: http://localhost:8501
 
 ### Deployment Waves
 
@@ -132,19 +198,26 @@ The system collects the following metrics:
 
 ```
 .
-├── backend/             # FastAPI backend
-│   ├── database.py      # Database configuration
-│   ├── main.py          # API endpoints
-│   └── models.py        # Database models
-├── cli/                 # Command-line interface
-│   ├── job_runner.py    # OTA update logic
-│   └── client.py        # CLI commands
-├── dashboard/           # Streamlit dashboard
-│   └── ota_dashboard.py # Dashboard UI
-├── k8s/                 # Kubernetes configurations
-│   └── robots.yaml      # Sample robot pod definitions
-├── metrics.txt          # Generated metrics file
-└── requirements.txt     # Python dependencies
+├── backend/                # FastAPI backend
+│   ├── database.py         # Database configuration
+│   ├── main.py             # API endpoints
+│   └── models.py           # Database models
+├── cli/                    # Command-line interface
+│   ├── job_runner.py       # OTA update logic
+│   └── client.py           # CLI commands
+├── dashboard/              # Streamlit dashboard
+│   └── ota_dashboard.py    # Dashboard UI
+├── k8s/                    # Kubernetes configurations
+│   └── robots.yaml         # Sample robot pod definitions
+├── .dockerignore           # Files to exclude from Docker builds
+├── .env.example            # Environment variables template
+├── docker-compose.yml      # Docker Compose configuration
+├── Dockerfile              # Main Dockerfile
+├── Dockerfile.api          # API-specific Dockerfile
+├── Dockerfile.dashboard    # Dashboard-specific Dockerfile
+├── Dockerfile.job-runner   # Job runner-specific Dockerfile
+├── metrics.txt             # Generated metrics file
+└── requirements.txt        # Python dependencies
 ```
 
 ## License

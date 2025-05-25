@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ota_jobs.db:/app/ota_jobs.db
+      - ./metrics.txt:/app/metrics.txt
+    environment:
+      - DATABASE_URL=sqlite:///./ota_jobs.db
+    networks:
+      - ota-network
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.kube:/root/.kube
+    networks:
+      - ota-network
+    restart: unless-stopped
+
+  job-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.job-runner
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.kube:/root/.kube
+      - ./metrics.txt:/app/metrics.txt
+    networks:
+      - ota-network
+    restart: unless-stopped
+
+networks:
+  ota-network:
+    driver: bridge
