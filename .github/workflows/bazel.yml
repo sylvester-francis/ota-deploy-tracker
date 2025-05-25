@@ -14,28 +14,32 @@ jobs:
     
     - name: Set up Bazel
       uses: bazelbuild/setup-bazelisk@v2
-    
-    - name: Mount bazel cache
-      uses: actions/cache@v3
       with:
-        path: "~/.cache/bazel"
-        key: bazel-${{ runner.os }}-${{ github.sha }}
-        restore-keys: bazel-${{ runner.os }}-
+        bazelisk-version: 'v1.26.0'
+    
+    # Disable cache to avoid the 422 error
+    # - name: Mount bazel cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: "~/.cache/bazel"
+    #     key: bazel-${{ runner.os }}-${{ github.sha }}
+    #     restore-keys: bazel-${{ runner.os }}-
     
     - name: Build
       run: |
-        bazel build //...
-    
+        bazel --output_base=/tmp/bazel-output build //...
+      
     - name: Test
       run: |
-        bazel test //...
-    
-    - name: Coverage
-      run: |
-        bazel coverage //...
-    
+        bazel --output_base=/tmp/bazel-output test //...
+      
     - name: Build Docker Images
       run: |
-        bazel build :api_server_image
-        bazel build :dashboard_image
-        bazel build :job_runner_image
+        bazel --output_base=/tmp/bazel-output build :api_server_image
+        bazel --output_base=/tmp/bazel-output build :dashboard_image
+        bazel --output_base=/tmp/bazel-output build :job_runner_image
+      
+    # Disable coverage for now as it might be causing issues
+    # - name: Coverage
+    #   run: |
+    #     bazel coverage //...
