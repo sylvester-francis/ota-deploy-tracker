@@ -1,0 +1,32 @@
+# Build options
+build --incompatible_enable_cc_toolchain_resolution
+build --experimental_repo_remote_exec
+
+# Python options
+build --python_version=PY3
+build --experimental_python_import_all_repositories
+
+# Test options
+test --test_output=errors
+test --test_summary=detailed
+
+# Docker options
+build --platforms=@io_bazel_rules_docker//platforms:default_container_platform
+
+# Coverage options
+coverage --instrument_test_targets
+coverage --combined_report=lcov
+coverage --coverage_report_generator=@bazel_tools//tools/test:coverage_report_generator
+
+# Performance options
+build --jobs=auto
+build --local_cpu_resources=%{CPU}
+build --local_ram_resources=%{RAM_MB}
+
+# Convenience aliases
+build:dev --compilation_mode=dbg
+build:dev --sandbox_debug
+build:dev --verbose_failures
+
+build:opt --compilation_mode=opt
+build:opt --copt=-O3

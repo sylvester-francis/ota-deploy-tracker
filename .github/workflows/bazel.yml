@@ -1,0 +1,41 @@
+name: Bazel Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Bazel
+      uses: bazelbuild/setup-bazelisk@v2
+    
+    - name: Mount bazel cache
+      uses: actions/cache@v3
+      with:
+        path: "~/.cache/bazel"
+        key: bazel-${{ runner.os }}-${{ github.sha }}
+        restore-keys: bazel-${{ runner.os }}-
+    
+    - name: Build
+      run: |
+        bazel build //...
+    
+    - name: Test
+      run: |
+        bazel test //...
+    
+    - name: Coverage
+      run: |
+        bazel coverage //...
+    
+    - name: Build Docker Images
+      run: |
+        bazel build :api_server_image
+        bazel build :dashboard_image
+        bazel build :job_runner_image

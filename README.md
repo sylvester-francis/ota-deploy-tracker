@@ -194,10 +194,82 @@ The system collects the following metrics:
 
 ## Development
 
+### Testing
+
+The project uses pytest for unit and integration testing. To run the tests:
+
+```bash
+# Run all tests
+pytest
+
+# Run tests with coverage report
+pytest --cov=backend --cov=cli --cov=dashboard --cov-report=term-missing
+```
+
+### Linting and Formatting
+
+The project uses several tools for code quality:
+
+```bash
+# Lint with Flake8
+flake8 backend/ cli/ dashboard/ tests/
+
+# Lint with Ruff (faster alternative to Flake8)
+ruff check backend/ cli/ dashboard/ tests/
+
+# Format code with Black
+black backend/ cli/ dashboard/ tests/
+
+# Sort imports with isort
+isort backend/ cli/ dashboard/ tests/
+```
+
+### Bazel Build System
+
+The project uses Bazel for building, testing, and packaging. Bazel provides fast, reproducible builds and supports multiple languages and platforms.
+
+```bash
+# Build all targets
+bazel build //...
+
+# Run all tests
+bazel test //...
+
+# Build specific components
+bazel build :api_server
+bazel build :dashboard
+bazel build :job_runner
+
+# Run specific components
+bazel run :api_server
+bazel run :dashboard
+bazel run :job_runner
+
+# Build Docker images
+bazel build :api_server_image
+bazel build :dashboard_image
+bazel build :job_runner_image
+```
+
+### Continuous Integration
+
+The project uses GitHub Actions for CI/CD with the following workflows:
+
+1. **Test and Lint**: Runs on every push and pull request to verify code quality and test coverage
+2. **Docker Build**: Builds and publishes Docker images to GitHub Container Registry
+3. **Bazel Build**: Builds and tests the project using Bazel for reproducible builds
+4. **Deploy**: Deploys the application to Kubernetes when changes are pushed to the main branch
+
 ### Project Structure
 
 ```
 .
+├── .github/                # GitHub configuration
+│   └── workflows/          # GitHub Actions workflows
+│       ├── test-lint.yml     # Testing and linting workflow
+│       ├── docker-build.yml  # Docker build workflow
+│       ├── bazel.yml         # Bazel build workflow
+│       └── deploy.yml        # Deployment workflow
 ├── backend/                # FastAPI backend
 │   ├── database.py         # Database configuration
 │   ├── main.py             # API endpoints
@@ -208,16 +280,27 @@ The system collects the following metrics:
 ├── dashboard/              # Streamlit dashboard
 │   └── ota_dashboard.py    # Dashboard UI
 ├── k8s/                    # Kubernetes configurations
-│   └── robots.yaml         # Sample robot pod definitions
+│   ├── robots.yaml         # Sample robot pod definitions
+│   └── deployment.yaml     # K8s deployment manifests
+├── tests/                  # Test suite
+│   ├── conftest.py         # Test fixtures and configuration
+│   ├── test_api.py         # API tests
+│   ├── test_cli.py         # CLI tests
+│   └── test_job_runner.py  # Job runner tests
+├── .bazelrc                # Bazel configuration
 ├── .dockerignore           # Files to exclude from Docker builds
 ├── .env.example            # Environment variables template
+├── .flake8                  # Flake8 configuration
+├── BUILD                    # Main Bazel build file
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile              # Main Dockerfile
 ├── Dockerfile.api          # API-specific Dockerfile
 ├── Dockerfile.dashboard    # Dashboard-specific Dockerfile
 ├── Dockerfile.job-runner   # Job runner-specific Dockerfile
 ├── metrics.txt             # Generated metrics file
-└── requirements.txt        # Python dependencies
+├── pyproject.toml         # Python project configuration
+├── requirements.txt        # Python dependencies
+└── WORKSPACE               # Bazel workspace definition
 ```
 
 ## License

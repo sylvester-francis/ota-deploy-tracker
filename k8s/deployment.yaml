@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ota-config
+data:
+  API_URL: "http://ota-api:8000"
+  DATABASE_URL: "sqlite:///./ota_jobs.db"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ota-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ota-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ota-api
+  template:
+    metadata:
+      labels:
+        app: ota-api
+    spec:
+      containers:
+      - name: api
+        image: ${API_IMAGE}
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: ota-config
+        volumeMounts:
+        - name: ota-data
+          mountPath: /app/data
+      volumes:
+      - name: ota-data
+        persistentVolumeClaim:
+          claimName: ota-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ota-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ota-dashboard
+  template:
+    metadata:
+      labels:
+        app: ota-dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: ${DASHBOARD_IMAGE}
+        ports:
+        - containerPort: 8501
+        envFrom:
+        - configMapRef:
+            name: ota-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ota-job-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ota-job-runner
+  template:
+    metadata:
+      labels:
+        app: ota-job-runner
+    spec:
+      containers:
+      - name: job-runner
+        image: ${JOB_RUNNER_IMAGE}
+        envFrom:
+        - configMapRef:
+            name: ota-config
+        volumeMounts:
+        - name: ota-data
+          mountPath: /app/data
+        - name: kube-config
+          mountPath: /root/.kube
+      volumes:
+      - name: ota-data
+        persistentVolumeClaim:
+          claimName: ota-data
+      - name: kube-config
+        secret:
+          secretName: kube-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ota-api
+spec:
+  selector:
+    app: ota-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ota-dashboard
+spec:
+  selector:
+    app: ota-dashboard
+  ports:
+  - port: 8501
+    targetPort: 8501
+  type: LoadBalancer
