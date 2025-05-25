@@ -258,7 +258,6 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 1. **Test and Lint**: Runs on every push and pull request to verify code quality and test coverage
 2. **Docker Build**: Builds and publishes Docker images to GitHub Container Registry
 3. **Bazel Build**: Builds and tests the project using Bazel for reproducible builds
-4. **Deploy**: Deploys the application to Kubernetes when changes are pushed to the main branch
 
 ### Project Structure
 
@@ -268,8 +267,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 │   └── workflows/          # GitHub Actions workflows
 │       ├── test-lint.yml     # Testing and linting workflow
 │       ├── docker-build.yml  # Docker build workflow
-│       ├── bazel.yml         # Bazel build workflow
-│       └── deploy.yml        # Deployment workflow
+│       └── bazel.yml         # Bazel build workflow
 ├── backend/                # FastAPI backend
 │   ├── database.py         # Database configuration
 │   ├── main.py             # API endpoints
