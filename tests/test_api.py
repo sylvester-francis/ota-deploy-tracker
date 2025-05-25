@@ -43,4 +43,6 @@ def test_update_status_endpoint(client):
         params={"job_id": job_id, "status": "complete"}
     )
     assert update_response.status_code == 200
-    assert update_response.json()["status"] == "complete"
+    response_data = update_response.json()
+    assert response_data["status"] == "success"
+    assert response_data["new_status"] == "complete"
