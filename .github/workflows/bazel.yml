@@ -12,10 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
     - name: Install Bazelisk manually
       run: |
-        wget -O /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64
-        chmod +x /usr/local/bin/bazel
+        mkdir -p $HOME/bin
+        wget -O $HOME/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64
+        chmod +x $HOME/bin/bazel
+        echo "$HOME/bin" >> $GITHUB_PATH
     
     - name: Install dependencies
       run: |
