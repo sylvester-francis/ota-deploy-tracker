@@ -206,23 +206,19 @@ pytest
 pytest --cov=backend --cov=cli --cov=dashboard --cov-report=term-missing
 ```
 
-### Linting and Formatting
+### Linting and Code Style
 
-The project uses several tools for code quality:
+The project uses Ruff for all linting and code style enforcement. Ruff is a fast Python linter and formatter that replaces multiple tools like Flake8, isort, and Black.
 
 ```bash
-# Lint with Flake8
-flake8 backend/ cli/ dashboard/ tests/
+# Lint and auto-fix issues
+ruff check --fix backend/ cli/ dashboard/ tests/
 
-# Lint with Ruff (faster alternative to Flake8)
+# Check for issues without fixing
 ruff check backend/ cli/ dashboard/ tests/
-
-# Format code with Black
-black backend/ cli/ dashboard/ tests/
-
-# Sort imports with isort
-isort backend/ cli/ dashboard/ tests/
 ```
+
+Ruff is configured in `pyproject.toml` with settings for line length, target Python version, and other style rules.
 
 ### Testing
 
@@ -275,7 +271,7 @@ The project uses GitHub Actions for CI/CD with the following workflows:
 │   └── test_job_runner.py  # Job runner tests
 ├── .dockerignore           # Files to exclude from Docker builds
 ├── .env.example            # Environment variables template
-├── .flake8                  # Flake8 configuration
+├── .flake8                  # Flake8 configuration (legacy, Ruff is now used)
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile              # Main Dockerfile
 ├── Dockerfile.api          # API-specific Dockerfile
