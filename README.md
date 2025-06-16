@@ -8,6 +8,7 @@ A comprehensive, enterprise-ready platform for managing safe, controlled softwar
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-1.20+-brightgreen.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Typer](https://img.shields.io/badge/typer-0.9.0-ff69b4.svg)
 
 ## 🏗️ Architecture Overview
 
@@ -32,7 +33,9 @@ graph TB
     end
     
     subgraph "Monitoring & Metrics"
-        Prometheus[Prometheus Metrics<br/>/metrics endpoint]
+        Prometheus[Prometheus Server<br/>Port: 9090]
+        Grafana[Grafana Dashboard<br/>Port: 3000]
+        Metrics[Metrics Endpoint<br/>/metrics]
         Logs[Application Logs<br/>Structured Logging]
     end
     
@@ -51,7 +54,9 @@ graph TB
     K8S_API -->|Deploy| Services
     
     %% Monitoring flow
-    API -->|Expose| Prometheus
+    API -->|Expose| Metrics
+    Metrics -->|Scrape| Prometheus
+    Prometheus -->|Data Source| Grafana
     JobRunner -->|Generate| Logs
     K8S_API -->|Status Updates| JobRunner
     
@@ -142,7 +147,7 @@ cd ota-deploy-tracker
 # Install dependencies
 pip install -r requirements.txt
 
-# Deploy sample applications
+# Deploy sample applications with logging
 kubectl apply -f k8s/application.yaml
 
 # Start the system
@@ -172,7 +177,18 @@ python -m cli.job_runner &
 - **API Documentation**: http://localhost:8000/docs
 - **Metrics Endpoint**: http://localhost:8000/metrics
 
-### 3. Your First Deployment
+### 3. Start Monitoring (Optional)
+
+```bash
+# Launch Prometheus + Grafana monitoring stack
+./start-monitoring.sh
+
+# Access monitoring:
+# - Prometheus: http://localhost:9090
+# - Grafana: http://localhost:3000 (admin/admin)
+```
+
+### 4. Your First Deployment
 
 ```bash
 # Deploy version 2.0.0 using canary strategy
@@ -266,13 +282,57 @@ ruff format backend/ cli/ dashboard/ tests/
 
 ---
 
+## 🧪 Sample Applications
+
+The platform includes sample applications (`app-1` and `app-2`) that demonstrate deployment management capabilities:
+
+### Application Features
+- **Realistic Logging**: Continuous application logs with startup sequences and health checks
+- **Simulated Metrics**: Random memory usage and connection statistics
+- **Version Tracking**: Applications tagged with `sw_version` labels for deployment tracking
+- **Health Monitoring**: Periodic health check logs every 30 seconds
+
+### Sample Log Output
+```bash
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Application app-1 starting up...
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Loading configuration for version 1.0.0
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Database connection established
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Server listening on port 8080
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Application ready to serve requests
+Mon Jun 16 06:23:20 UTC 2025 [INFO] Health check passed - app-1 running normally
+Mon Jun 16 06:23:20 UTC 2025 [DEBUG] Memory usage: 73MB
+Mon Jun 16 06:23:20 UTC 2025 [DEBUG] Active connections: 5
+```
+
+### Dashboard Features
+- **Real-time Pod Status**: View current application versions and status
+- **Log Streaming**: Access live application logs through the web interface
+- **Auto-refresh**: Optional 30-second auto-refresh for real-time monitoring
+- **Manual Refresh**: Instant updates with the refresh button
+
+---
+
 ## 📊 Monitoring & Observability
+
+### Quick Start Monitoring Stack
+
+Launch the complete monitoring solution with one command:
+
+```bash
+# Start Prometheus + Grafana
+./start-monitoring.sh
+
+# Access URLs:
+# - Prometheus UI: http://localhost:9090
+# - Grafana Dashboard: http://localhost:3000 (admin/admin)
+# - Raw Metrics: http://localhost:8000/metrics
+```
 
 ### Prometheus Metrics
 
 The platform exports comprehensive metrics for monitoring:
 
-```
+```bash
 # Deployment Metrics
 ota_updated_pods_total                    # Total pods updated
 ota_last_run_timestamp_seconds           # Last deployment timestamp
@@ -283,6 +343,47 @@ ota_jobs_total                          # Total deployment jobs
 # Rollback Metrics
 ota_rollback_pods_total                  # Total pods rolled back
 ota_last_rollback_timestamp_seconds     # Last rollback timestamp
+```
+
+### Grafana Dashboard
+
+Pre-configured dashboard includes:
+
+- **📈 Real-time Metrics**: Live deployment statistics and trends
+- **📊 Visual Charts**: Deployment timeline and rollback activity
+- **🎯 Key Performance Indicators**: Success rates and system health
+- **⏰ Historical Data**: Track deployment patterns over time
+
+### Manual Monitoring Setup
+
+```bash
+# Start monitoring stack manually
+cd monitoring
+docker-compose -f docker-compose.monitoring.yml up -d
+
+# Stop monitoring stack
+docker-compose -f docker-compose.monitoring.yml down
+
+# View raw metrics
+curl http://localhost:8000/metrics
+```
+
+### Custom Queries
+
+Example Prometheus queries for advanced monitoring:
+
+```promql
+# Deployment success rate
+(ota_jobs_successful / ota_jobs_total) * 100
+
+# Average deployment frequency (per hour)
+rate(ota_jobs_total[1h]) * 3600
+
+# Time since last deployment
+time() - ota_last_run_timestamp_seconds
+
+# Rollback frequency
+rate(ota_rollback_pods_total[24h])
 ```
 
 ---

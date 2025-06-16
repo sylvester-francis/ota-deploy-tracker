@@ -9,9 +9,22 @@ metadata:
     status: "idle"
 spec:
   containers:
-    - name: busybox
+    - name: application
       image: busybox
-      command: ["sleep", "3600"]
+      command: ["sh", "-c"]
+      args:
+        - |
+          echo "$(date) [INFO] Application app-1 starting up..."
+          echo "$(date) [INFO] Loading configuration for version 1.0.0"
+          echo "$(date) [INFO] Database connection established"
+          echo "$(date) [INFO] Server listening on port 8080"
+          echo "$(date) [INFO] Application ready to serve requests"
+          while true; do
+            echo "$(date) [INFO] Health check passed - app-1 running normally"
+            echo "$(date) [DEBUG] Memory usage: $(( RANDOM % 100 + 50 ))MB"
+            echo "$(date) [DEBUG] Active connections: $(( RANDOM % 20 + 5 ))"
+            sleep 30
+          done
 
 ---
 apiVersion: v1
@@ -24,6 +37,19 @@ metadata:
     status: "idle"
 spec:
   containers:
-    - name: busybox
+    - name: application
       image: busybox
-      command: ["sleep", "3600"]
+      command: ["sh", "-c"]
+      args:
+        - |
+          echo "$(date) [INFO] Application app-2 starting up..."
+          echo "$(date) [INFO] Loading configuration for version 1.0.0"
+          echo "$(date) [INFO] Database connection established"
+          echo "$(date) [INFO] Server listening on port 8080"
+          echo "$(date) [INFO] Application ready to serve requests"
+          while true; do
+            echo "$(date) [INFO] Health check passed - app-2 running normally"
+            echo "$(date) [DEBUG] Memory usage: $(( RANDOM % 100 + 60 ))MB"
+            echo "$(date) [DEBUG] Active connections: $(( RANDOM % 15 + 3 ))"
+            sleep 30
+          done
