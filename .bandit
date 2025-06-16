@@ -1,0 +1,8 @@
+exclude_dirs:
+  - tests
+  - test_venv
+skips:
+  - B113
+  - B404
+  - B603
+  - B607

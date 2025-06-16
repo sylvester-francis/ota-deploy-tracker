@@ -70,7 +70,7 @@ try:
             "get",
             "pods",
             "-o",
-            'jsonpath={range .items[*]}{.metadata.name} {.metadata.labels.sw_version} {.metadata.labels.status}{"\\n"}{end}',  # noqa: E501
+            'jsonpath={range .items[*]}{.metadata.name} {.metadata.labels.sw_version} {.metadata.labels.status}{"\\n"}{end}',
         ],
     ).decode()
     pod_data = []

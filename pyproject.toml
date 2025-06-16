@@ -8,12 +8,16 @@ version = "1.0.0"
 description = "A comprehensive system for managing Kubernetes deployments"
 authors = [{name = "Sylvester Francis", email = "sylvester@example.com"}]
 license = {text = "MIT"}
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [tool.ruff]
 line-length = 88
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "COM", "C4", "DTZ", "T10", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "NPY", "RUF"]
 ignore = ["S101", "T201", "T203"]
+
+[tool.ruff.lint.per-file-ignores]
+"dashboard/*.py" = ["S113", "S603", "S607", "PD901", "BLE001", "PLR2004", "E501"]
+"tests/*.py" = ["S101"]

@@ -74,7 +74,10 @@ def test_rollback_application_pods_with_pods(
     mock_k8s_client.list_pod_for_all_namespaces.return_value.items = [mock_pod]
     mock_retry_patch.return_value = True
 
-    with patch("cli.job_runner.Path.write_text") as mock_write, patch("cli.job_runner.Path.read_text") as mock_read:
+    with (
+        patch("cli.job_runner.Path.write_text") as mock_write,
+        patch("cli.job_runner.Path.read_text") as mock_read,
+    ):
         mock_read.return_value = "existing metrics"
         rollback_application_pods("1.0.0", "green")
     mock_load_config.assert_called_once()
