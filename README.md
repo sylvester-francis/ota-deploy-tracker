@@ -448,20 +448,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 👨‍💻 About Sylvester
-
-This project is built by **Sylvester Francis**, a Senior Software Engineer specializing in AI-powered solutions and cloud architecture. With 7+ years of experience in software engineering, Sylvester is passionate about transforming ideas into intelligent solutions that actually matter.
-
-**Professional Focus:**
-- Tech Solutions Architect & GenAI Consultant
-- AI, cloud computing, and full-stack development
-- Python, React, AWS, and OpenAI technologies
-- Building innovative AI tools and tech solutions
-
-*"The best way to predict the future is to create it. Let's build something extraordinary together!"*
-
----
-
 ## 🤝 Connect & Follow
 
 Ready to collaborate or learn more about cutting-edge tech solutions?
