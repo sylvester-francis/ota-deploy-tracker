@@ -448,4 +448,30 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## 👨‍💻 About Sylvester
+
+This project is built by **Sylvester Francis**, a Senior Software Engineer specializing in AI-powered solutions and cloud architecture. With 7+ years of experience in software engineering, Sylvester is passionate about transforming ideas into intelligent solutions that actually matter.
+
+**Professional Focus:**
+- Tech Solutions Architect & GenAI Consultant
+- AI, cloud computing, and full-stack development
+- Python, React, AWS, and OpenAI technologies
+- Building innovative AI tools and tech solutions
+
+*"The best way to predict the future is to create it. Let's build something extraordinary together!"*
+
+---
+
+## 🤝 Connect & Follow
+
+Ready to collaborate or learn more about cutting-edge tech solutions?
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/sylvesterranjith/)
+[![Medium](https://img.shields.io/badge/Medium-Follow-black?style=for-the-badge&logo=medium)](https://medium.com/@sylvesterranjithfrancis)
+[![Instagram](https://img.shields.io/badge/Instagram-@techwithsyl-purple?style=for-the-badge&logo=instagram)](https://instagram.com/techwithsyl)
+
+**Let's build the future of deployment management together!**
+
+---
+
 **Ready to transform your deployment process?** [Get started now](#-quick-start) and experience professional-grade Kubernetes deployment management!
