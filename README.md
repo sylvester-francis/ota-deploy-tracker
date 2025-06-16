@@ -4,11 +4,13 @@
 
 A comprehensive, enterprise-ready platform for managing safe, controlled software deployments across Kubernetes clusters with real-time monitoring, multiple rollout strategies, and instant rollback capabilities.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-1.20+-brightgreen.svg)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
-![Typer](https://img.shields.io/badge/typer-0.9.0-ff69b4.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Prometheus](https://img.shields.io/badge/prometheus-monitoring-orange.svg)
+![Grafana](https://img.shields.io/badge/grafana-dashboards-yellow.svg)
+![FastAPI](https://img.shields.io/badge/fastapi-0.104+-green.svg)
 
 ## 🏗️ Architecture Overview
 
