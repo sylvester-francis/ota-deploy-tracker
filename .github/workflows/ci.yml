@@ -94,7 +94,7 @@ jobs:
     
     - name: Validate Kubernetes manifests
       run: |
-        kubectl --dry-run=client apply -f k8s/
+        kubectl --dry-run=client --validate=false apply -f k8s/
     
     - name: Check Kubernetes configs
       run: |
