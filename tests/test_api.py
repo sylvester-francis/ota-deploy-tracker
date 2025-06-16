@@ -75,4 +75,3 @@ def test_metrics():
     response = client.get("/metrics")
     assert response.status_code == HTTP_OK
     assert response.headers["content-type"] == "text/plain; charset=utf-8"
-

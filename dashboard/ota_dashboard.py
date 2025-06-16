@@ -37,7 +37,8 @@ with col1:
             result = subprocess.run(
                 ["python", "-m", "cli.client", "deploy", version, "--wave", wave],
                 capture_output=True,
-                text=True, check=False,
+                text=True,
+                check=False,
             )
             if result.returncode == 0:
                 st.success("Deployment triggered successfully!")
@@ -48,13 +49,24 @@ with col2:
     st.subheader("🔄 Rollback Deployment")
     with st.form("rollback_form"):
         rollback_version = st.text_input("Rollback to Version", "2.0.0")
-        rollback_wave = st.selectbox("Rollback Wave", ["canary", "blue", "green"], index=2)
+        rollback_wave = st.selectbox(
+            "Rollback Wave", ["canary", "blue", "green"], index=2
+        )
         rollback_submitted = st.form_submit_button("Trigger Rollback")
         if rollback_submitted:
             result = subprocess.run(
-                ["python", "-m", "cli.client", "rollback", rollback_version, "--wave", rollback_wave],
+                [
+                    "python",
+                    "-m",
+                    "cli.client",
+                    "rollback",
+                    rollback_version,
+                    "--wave",
+                    rollback_wave,
+                ],
                 capture_output=True,
-                text=True, check=False,
+                text=True,
+                check=False,
             )
             if result.returncode == 0:
                 st.success("Rollback triggered successfully!")

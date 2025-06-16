@@ -52,7 +52,8 @@ def test_update(mock_update_application_pods):
         update("2.0.0", "canary")
 
     mock_update_application_pods.assert_called_once_with(
-        version="2.0.0", wave="canary",
+        version="2.0.0",
+        wave="canary",
     )
     mock_echo.assert_called_once()
 
@@ -64,7 +65,7 @@ def test_rollback(mock_rollback_application_pods):
         rollback("1.0.0", "green")
 
     mock_rollback_application_pods.assert_called_once_with(
-        previous_version="1.0.0", wave="green",
+        previous_version="1.0.0",
+        wave="green",
     )
     mock_echo.assert_called_once()
-

@@ -235,7 +235,8 @@ def rollback_application_pods(previous_version: str, wave: str = "green"):
     try:
         existing_content = metrics_path.read_text(encoding="utf-8")
         metrics_path.write_text(
-            existing_content + "\n" + rollback_metrics + "\n", encoding="utf-8",
+            existing_content + "\n" + rollback_metrics + "\n",
+            encoding="utf-8",
         )
         print(f"📊 Rollback metrics written to {metrics_path}")
     except (FileNotFoundError, OSError) as e:
@@ -283,4 +284,3 @@ def run_ota_jobs():
 
 if __name__ == "__main__":
     run_ota_jobs()
-

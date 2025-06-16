@@ -27,7 +27,9 @@ def mock_pod():
 @patch("cli.job_runner.client.CoreV1Api")
 @patch("cli.job_runner.config.load_kube_config")
 def test_update_application_pods_no_pods(
-    mock_load_config, mock_core_api, mock_k8s_client,
+    mock_load_config,
+    mock_core_api,
+    mock_k8s_client,
 ):
     """Test update_application_pods when no pods are found."""
     mock_core_api.return_value = mock_k8s_client
@@ -37,7 +39,9 @@ def test_update_application_pods_no_pods(
         update_application_pods("2.0.0", "canary")
     mock_load_config.assert_called_once()
     mock_core_api.assert_called_once()
-    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(label_selector="status=idle")
+    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(
+        label_selector="status=idle"
+    )
     # Verify metrics were written even with no pods
     assert mock_write.call_count > 0
 
@@ -46,7 +50,11 @@ def test_update_application_pods_no_pods(
 @patch("cli.job_runner.config.load_kube_config")
 @patch("cli.job_runner.retry_patch")
 def test_update_application_pods_with_pods(
-    mock_retry_patch, mock_load_config, mock_core_api, mock_k8s_client, mock_pod,
+    mock_retry_patch,
+    mock_load_config,
+    mock_core_api,
+    mock_k8s_client,
+    mock_pod,
 ):
     """Test update_application_pods with pods to update."""
     mock_core_api.return_value = mock_k8s_client
@@ -57,7 +65,9 @@ def test_update_application_pods_with_pods(
         update_application_pods("2.0.0", "canary")
     mock_load_config.assert_called_once()
     mock_core_api.assert_called_once()
-    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(label_selector="status=idle")
+    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(
+        label_selector="status=idle"
+    )
     mock_retry_patch.assert_called_once()
     # Verify metrics were written
     assert mock_write.call_count > 0
@@ -67,7 +77,11 @@ def test_update_application_pods_with_pods(
 @patch("cli.job_runner.config.load_kube_config")
 @patch("cli.job_runner.retry_patch")
 def test_rollback_application_pods_with_pods(
-    mock_retry_patch, mock_load_config, mock_core_api, mock_k8s_client, mock_pod,
+    mock_retry_patch,
+    mock_load_config,
+    mock_core_api,
+    mock_k8s_client,
+    mock_pod,
 ):
     """Test rollback_application_pods with pods to rollback."""
     mock_core_api.return_value = mock_k8s_client
@@ -82,7 +96,9 @@ def test_rollback_application_pods_with_pods(
         rollback_application_pods("1.0.0", "green")
     mock_load_config.assert_called_once()
     mock_core_api.assert_called_once()
-    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(label_selector="status=updated")
+    mock_k8s_client.list_pod_for_all_namespaces.assert_called_once_with(
+        label_selector="status=updated"
+    )
     mock_retry_patch.assert_called_once()
     # Verify metrics were written
     assert mock_write.call_count > 0

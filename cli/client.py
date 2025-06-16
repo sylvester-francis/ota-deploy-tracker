@@ -72,4 +72,3 @@ def rollback(version: str, wave: str = "green"):
 
 if __name__ == "__main__":
     app()
-
