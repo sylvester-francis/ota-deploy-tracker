@@ -37,7 +37,7 @@ with col1:
             result = subprocess.run(
                 ["python", "-m", "cli.client", "deploy", version, "--wave", wave],
                 capture_output=True,
-                text=True,
+                text=True, check=False,
             )
             if result.returncode == 0:
                 st.success("Deployment triggered successfully!")
@@ -54,7 +54,7 @@ with col2:
             result = subprocess.run(
                 ["python", "-m", "cli.client", "rollback", rollback_version, "--wave", rollback_wave],
                 capture_output=True,
-                text=True,
+                text=True, check=False,
             )
             if result.returncode == 0:
                 st.success("Rollback triggered successfully!")
@@ -71,23 +71,23 @@ try:
             "pods",
             "-o",
             'jsonpath={range .items[*]}{.metadata.name} {.metadata.labels.sw_version} {.metadata.labels.status}{"\\n"}{end}',  # noqa: E501
-        ]
+        ],
     ).decode()
     pod_data = []
     for line in output.strip().split("\n"):
         parts = line.split()
         if len(parts) == 3:
-            pod_data.append({"Name": parts[0], "Version": parts[1], "Status": parts[2]})  # noqa : E501
+            pod_data.append({"Name": parts[0], "Version": parts[1], "Status": parts[2]})
     pod_df = pd.DataFrame(pod_data)
     st.dataframe(pod_df)
 except Exception as e:
     st.error(f"Error fetching pods: {e}")
 
 st.subheader("🧾 Pod Logs")
-selected_pod = st.selectbox("Choose an application pod", [p["Name"] for p in pod_data])  # noqa : E501
+selected_pod = st.selectbox("Choose an application pod", [p["Name"] for p in pod_data])
 if st.button("View Logs"):
     try:
-        logs = subprocess.check_output(["kubectl", "logs", selected_pod]).decode()  # noqa : E501
+        logs = subprocess.check_output(["kubectl", "logs", selected_pod]).decode()
         st.code(logs, language="bash")
     except Exception as e:
         st.error(f"Error: {e}")

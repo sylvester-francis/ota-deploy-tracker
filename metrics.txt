@@ -1,0 +1,39 @@
+# HELP ota_updated_pods_total Total pods updated
+# TYPE ota_updated_pods_total counter
+ ota_updated_pods_total 1
+# HELP ota_last_run_timestamp_seconds Last deployment timestamp
+# TYPE ota_last_run_timestamp_seconds gauge
+ ota_last_run_timestamp_seconds 1750045640
+
+
+# HELP ota_jobs_pending Number of pending deployment jobs
+# TYPE ota_jobs_pending gauge
+ ota_jobs_pending 0
+
+# HELP ota_jobs_successful Number of successfully updated jobs
+# TYPE ota_jobs_successful counter
+ ota_jobs_successful 1
+
+# HELP ota_jobs_total Total number of deployment jobs triggered
+# TYPE ota_jobs_total gauge
+ ota_jobs_total 1
+
+# HELP ota_rollback_pods_total Total pods rolled back
+# TYPE ota_rollback_pods_total counter
+ ota_rollback_pods_total 1
+# HELP ota_last_rollback_timestamp_seconds Last rollback timestamp
+# TYPE ota_last_rollback_timestamp_seconds gauge
+ ota_last_rollback_timestamp_seconds 1750045640
+
+
+# HELP ota_jobs_pending Number of pending deployment jobs
+# TYPE ota_jobs_pending gauge
+ ota_jobs_pending 1
+
+# HELP ota_jobs_successful Number of successfully updated jobs
+# TYPE ota_jobs_successful counter
+ ota_jobs_successful 1
+
+# HELP ota_jobs_total Total number of deployment jobs triggered
+# TYPE ota_jobs_total gauge
+ ota_jobs_total 2

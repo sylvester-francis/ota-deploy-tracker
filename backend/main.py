@@ -1,5 +1,5 @@
 # backend/main.py
-import os
+from pathlib import Path
 
 from fastapi import FastAPI, Response
 
@@ -104,17 +104,21 @@ def rollback_deployment(version: str, wave: str = "green"):
         db.add(job)
         db.commit()
         db.refresh(job)
-        return {"job_id": job.id, "version": job.version, "status": job.status, "type": "rollback"}
+        return {
+            "job_id": job.id,
+            "version": job.version,
+            "status": job.status,
+            "type": "rollback",
+        }
     finally:
         db.close()
 
 
 @app.get("/metrics")
 def metrics():
-    metrics_path = os.path.join(os.path.dirname(__file__), "..", "metrics.txt")
+    metrics_path = Path(__file__).parent.parent / "metrics.txt"
     try:
-        with open(metrics_path, "r") as f:
-            content = f.read()
+        content = metrics_path.read_text(encoding="utf-8")
         return Response(content=content, media_type="text/plain")
-    except Exception as e:
+    except (FileNotFoundError, OSError) as e:
         return Response(f"# error: {e}", media_type="text/plain")

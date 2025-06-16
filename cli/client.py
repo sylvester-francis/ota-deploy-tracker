@@ -4,7 +4,7 @@ import requests
 import typer
 from dotenv import load_dotenv
 
-from .job_runner import update_application_pods, rollback_application_pods  # noqa: E402
+from .job_runner import rollback_application_pods, update_application_pods
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -19,24 +19,27 @@ def deploy(version: str, wave: str = "canary"):
     Trigger a new deployment job.
     """
     response = requests.post(
-        f"{API_URL}/ota/deploy", params={"version": version, "wave": wave}
+        f"{API_URL}/ota/deploy",
+        params={"version": version, "wave": wave},
+        timeout=30,
     )
-    if response.status_code == 200:
+    if response.status_code == requests.codes.ok:
         data = response.json()
         typer.echo(
-            f"✅ Deployment Job Created: ID {data['job_id']} | Status: {data['status']}"
+            f"✅ Deployment Job Created: ID {data['job_id']} | "
+            f"Status: {data['status']}",
         )
     else:
         typer.echo("❌ Failed to trigger deployment job.")
 
 
 @app.command()
-def list():
+def list_jobs():
     """
     List all deployment jobs.
     """
-    response = requests.get(f"{API_URL}/ota/jobs")
-    if response.status_code == 200:
+    response = requests.get(f"{API_URL}/ota/jobs", timeout=30)
+    if response.status_code == requests.codes.ok:
         for job in response.json():
             job_info = (
                 f"[{job['id']}] Version: {job['version']} | "
@@ -52,7 +55,9 @@ def update(version: str, wave: str = "canary"):
     """
     Run deployment update rollout locally (patch Kubernetes pods).
     """
-    typer.echo(f"🚀 Running local deployment update for version {version}, wave {wave}")  # noqa : E501
+    typer.echo(
+        f"🚀 Running local deployment update for version {version}, wave {wave}",
+    )
     update_application_pods(version=version, wave=wave)
 
 
@@ -67,3 +72,4 @@ def rollback(version: str, wave: str = "green"):
 
 if __name__ == "__main__":
     app()
+

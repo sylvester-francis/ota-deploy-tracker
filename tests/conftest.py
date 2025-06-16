@@ -9,5 +9,5 @@ from backend.database import Base
 def test_db():
     engine = create_engine("sqlite:///:memory:")
     Base.metadata.create_all(bind=engine)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    return SessionLocal()
+    session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    return session_local()
