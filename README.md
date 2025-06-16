@@ -9,6 +9,68 @@ A comprehensive, enterprise-ready platform for managing safe, controlled softwar
 ![Kubernetes](https://img.shields.io/badge/kubernetes-1.20+-brightgreen.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 
+## 🏗️ Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "External Clients"
+        CLI[CLI Tool<br/>cli/client.py]
+        WebUI[Web Dashboard<br/>dashboard/ota_dashboard.py]
+        API_Client[External API Client<br/>CI/CD Systems]
+    end
+    
+    subgraph "Core Platform"
+        API[FastAPI Backend<br/>backend/main.py<br/>Port: 8000]
+        JobRunner[Job Runner<br/>cli/job_runner.py<br/>Background Processing]
+        DB[(SQLite Database<br/>deployment.db)]
+    end
+    
+    subgraph "Kubernetes Cluster"
+        K8S_API[Kubernetes API Server]
+        Pods[Application Pods<br/>k8s/application.yaml]
+        Services[Services & Deployments<br/>k8s/deployment.yaml]
+    end
+    
+    subgraph "Monitoring & Metrics"
+        Prometheus[Prometheus Metrics<br/>/metrics endpoint]
+        Logs[Application Logs<br/>Structured Logging]
+    end
+    
+    %% Client connections
+    CLI -->|HTTP Requests| API
+    WebUI -->|Streamlit Server| API
+    API_Client -->|REST API| API
+    
+    %% Core platform flow
+    API -->|Job Queue| DB
+    DB -->|Pending Jobs| JobRunner
+    JobRunner -->|kubectl Operations| K8S_API
+    
+    %% Kubernetes operations
+    K8S_API -->|Manage| Pods
+    K8S_API -->|Deploy| Services
+    
+    %% Monitoring flow
+    API -->|Expose| Prometheus
+    JobRunner -->|Generate| Logs
+    K8S_API -->|Status Updates| JobRunner
+    
+    %% Deployment strategies
+    JobRunner -.->|Canary<br/>1 Pod| Pods
+    JobRunner -.->|Blue<br/>Subset| Pods
+    JobRunner -.->|Green<br/>All Pods| Pods
+    
+    %% Rollback flow
+    JobRunner -.->|Rollback<br/>Previous Version| Pods
+    
+    style CLI fill:#e1f5fe
+    style WebUI fill:#e8f5e8
+    style API fill:#fff3e0
+    style JobRunner fill:#fce4ec
+    style K8S_API fill:#f3e5f5
+    style Prometheus fill:#e0f2f1
+```
+
 ---
 
 ## 🎯 Why Choose Kubernetes Deployment Manager?
