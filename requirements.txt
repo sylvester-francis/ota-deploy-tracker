@@ -2,7 +2,7 @@ fastapi==0.115.13
 uvicorn==0.24.0
 sqlalchemy>=2.0.25
 requests==2.31.0
-typer==0.9.0
+typer==0.16.1
 streamlit==1.46.0
 kubernetes==28.1.0
 python-dotenv==1.1.1
